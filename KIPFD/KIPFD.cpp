@@ -5,6 +5,7 @@
 #include "cximage/ximage.h"
 #include "ida/defs.h"
 
+_DWORD dword_1006DE5C;
 //////////////////////////////////////////////////////////////////////KipFD_FreeFeature()
 int KipFD_FreeFeature(int a1)
 {
@@ -195,10 +196,254 @@ int __cdecl KipFD_SaveFaceThumbnail(int a1, int a2, int a3, const wchar_t *a4)
 				newImage->Destroy();
 				return 0;
 			}
-			// dword_1006DE5C = 1;
+			dword_1006DE5C = 1;
 		}
 		// delete newImage;
 		newImage = NULL;
 	}
 	return -1;
+}
+//////////////////////////////////////////////////////////////////////KipFD_Detect()
+int __cdecl sub_10018A00(
+						 void *Src,
+						 int a2,
+						 int a3,
+						 _DWORD *a4,
+						 _DWORD *a5,
+						 int a6,
+						 int a7,
+						 int a8,
+						 int a9,
+						 int a10,
+						 _DWORD *a11)
+{
+	unsigned int v12; // edi
+	unsigned int v13; // ebx
+	int v14; // esi
+	int v15; // [esp+0h] [ebp-184h]
+	int v16; // [esp+0h] [ebp-184h]
+	int v17; // [esp+4h] [ebp-180h]
+	int v18; // [esp+4h] [ebp-180h]
+	void **v19; // [esp+14h] [ebp-170h] BYREF
+	int v20; // [esp+18h] [ebp-16Ch]
+	int v21; // [esp+1Ch] [ebp-168h]
+	float v22; // [esp+20h] [ebp-164h]
+	int v23; // [esp+28h] [ebp-15Ch]
+	int v24[2]; // [esp+2Ch] [ebp-158h] BYREF
+	int v25; // [esp+180h] [ebp-4h]
+
+	if ( !a11 )
+		return 1;
+	/*v19 = &vtk_DCR::`vftable';
+		sub_10017580();
+	v25 = 0;
+	sub_1002D5E0(Src, a3);
+	(*(void (__thiscall **)(_DWORD *, void ***))(*a11 + 12))(a11, &v19);
+	v12 = a4[4];
+	v21 = 0;
+	if ( a4[3] > v12 )
+		_invalid_parameter_noinfo();
+	v13 = a4[3];
+	v22 = *(float *)a4;
+	if ( v13 > a4[4] )
+		_invalid_parameter_noinfo();
+	sub_10019C10(*a4, v13, LODWORD(v22), v12);
+	v24[1] = 0x80000000;
+	while ( 1 )
+	{
+		sub_1002D540(v15, v17);
+		v14 = v20;
+		sub_10010450();
+		sub_10001F10(v24);
+		if ( !v23 )
+			break;
+		(*(void (__thiscall **)(_DWORD *, void ***))(a11[2] + 12))(a11 + 2, &v19);
+		sub_1002D540(v16, v18);
+		v22 = sub_100105B0(v20);
+		if ( v22 >= 0.1000000014901161 )
+		{
+			sub_1002D680(&v19);
+			sub_10019A40();
+			++v21;
+		}
+		if ( v21 >= 1000 )
+		{
+			v14 = v20;
+			break;
+		}
+	}
+	v25 = -1;
+	*a5 = v21;
+	v19 = &vtk_DCR::`vftable';
+		if ( v14 )
+			(**(void (__thiscall ***)(int, int))(*(_DWORD *)(*(_DWORD *)(v14 + 4) + 4) + v14 + 4))(
+			*(_DWORD *)(*(_DWORD *)(v14 + 4) + 4) + v14 + 4,
+			1);
+	return 0;*/
+}
+
+int sub_10019750(int *a1, void *Src, int a3, int a4)
+{
+	int v5; // [esp-18h] [ebp-20h]
+	int v6; // [esp-14h] [ebp-1Ch]
+	int v7; // [esp-10h] [ebp-18h]
+	int v8; // [esp-Ch] [ebp-14h]
+	int v9; // [esp-8h] [ebp-10h]
+	int v10; // [esp-4h] [ebp-Ch]
+	int v11; // [esp+4h] [ebp-4h] BYREF
+
+	v5 = *a1;
+	v6 = a1[1];
+	v7 = a1[2];
+	v8 = a1[3];
+	v9 = a1[4];
+	v10 = a1[5];
+	v11 = 0;
+	if ( sub_10018A00(Src, a3, a4, (_DWORD*)(a1 + 6), (_DWORD*)&v11, v5, v6, v7, v8, v9, (_DWORD*)v10) )
+		return -1;
+	else
+		return v11;
+}
+
+int __cdecl KipFD_Detect(int a1, int *a2)
+{
+	int v2; // ebx
+	int v3; // eax
+	int v4; // eax
+	int v5; // eax
+	int v6; // edx
+	int v7; // ecx
+	int v8; // eax
+	int v9; // ebx
+	_BYTE *v10; // edi
+	int v11; // eax
+	int v12; // edx
+	int v13; // ecx
+	int v14; // eax
+	int v15; // ebx
+	_BYTE *v16; // edi
+	int v17; // eax
+	int v18; // edx
+	int v19; // ecx
+	int i; // edi
+	int v21; // esi
+	_BYTE *Src; // [esp+10h] [ebp-10h]
+	int v24; // [esp+14h] [ebp-Ch]
+	int v25; // [esp+14h] [ebp-Ch]
+	int v26; // [esp+14h] [ebp-Ch]
+	int v27; // [esp+18h] [ebp-8h]
+	int v28; // [esp+18h] [ebp-8h]
+	int v29; // [esp+1Ch] [ebp-4h]
+	int v30; // [esp+1Ch] [ebp-4h]
+	int v31; // [esp+1Ch] [ebp-4h]
+
+	v2 = 0;
+	if ( !a1 )
+		return -1;
+	if ( !a2 )
+		return -1;
+	v3 = *a2;
+	if ( *a2 != 20 && v3 != 21 && v3 != 808466521 )
+		return -1;
+	if ( (int)sub_1002EDC0() > 2 || (int)sub_1002EDC0() <= 0 )
+	{
+		dword_1006DE5C = 1;
+		return -1;
+	}
+	Src = (_BYTE*)operator new[](a2[1] * a2[2]);
+	v4 = *a2;
+	if ( *a2 == 20 )
+	{
+		v5 = a2[2];
+		v6 = 0;
+		v24 = 0;
+		v29 = a2[3];
+		v27 = 0;
+		if ( v5 > 0 )
+		{
+			v7 = a2[1];
+			do
+			{
+				v8 = a2[4] + v29 * (v5 - v6 - 1);
+				v9 = 0;
+				if ( v7 > 0 )
+				{
+					v10 = (_BYTE *)(v8 + 2);
+					do
+					{
+						Src[v24] = (char)(43 * *v10 + 114 * *(v10 - 2) + 75 * *(v10 - 1)) / -24;
+						v7 = a2[1];
+						++v9;
+						v10 += 3;
+						++v24;
+					}
+					while ( v9 < v7 );
+					v6 = v27;
+				}
+				v5 = a2[2];
+				v27 = ++v6;
+			}
+			while ( v6 < v5 );
+		}
+	}
+	else if ( v4 == 21 )
+	{
+		v30 = a2[3];
+		v11 = a2[2];
+		v12 = 0;
+		v28 = 0;
+		v25 = 0;
+		if ( v11 > 0 )
+		{
+			v13 = a2[1];
+			do
+			{
+				v14 = a2[4] + v30 * (v11 - v12 - 1);
+				v15 = 0;
+				if ( v13 > 0 )
+				{
+					v16 = (_BYTE *)(v14 + 2);
+					do
+					{
+						Src[v28] = (char)(114 * *v16 + 43 * *(v16 - 2) + 75 * *(v16 - 1)) / -24;
+						v13 = a2[1];
+						++v15;
+						v16 += 3;
+						++v28;
+					}
+					while ( v15 < v13 );
+					v12 = v25;
+				}
+				v11 = a2[2];
+				v25 = ++v12;
+			}
+			while ( v12 < v11 );
+		}
+	}
+	else if ( v4 == 808466521 )
+	{
+		v31 = a2[3];
+		v17 = a2[2];
+		v26 = 0;
+		if ( v17 > 0 )
+		{
+			v18 = a2[1];
+			do
+			{
+				v19 = 0;
+				for ( i = a2[4] + v31 * (v17 - v26 - 1); v19 < v18; ++v2 )
+				{
+					Src[v2] = *(_BYTE *)(v19 + i);
+					v18 = a2[1];
+					++v19;
+				}
+				v17 = a2[2];
+				++v26;
+			}
+			while ( v26 < v17 );
+		}
+	}
+	v21 = sub_10019750((int*)Src, (void*)a2[1], a2[2], 0);
+	operator delete[](Src);
+	return v21;
 }
