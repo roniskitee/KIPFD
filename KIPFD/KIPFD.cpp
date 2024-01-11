@@ -5,7 +5,7 @@
 #include "cximage/ximage.h"
 #include "ida/defs.h"
 
-_DWORD dword_1006DE5C;
+_DWORD dword_1006DE5C = 0;
 //////////////////////////////////////////////////////////////////////KipFD_FreeFeature()
 int KipFD_FreeFeature(int a1)
 {
@@ -34,9 +34,109 @@ int sub_100197C0(float* a1)
 	return 1;
 }
 
+int __stdcall sub_10030000(int a1)
+{
+	int v1; // edx
+
+	*(_DWORD *)a1 = &unk_1005677C;
+	// *(_DWORD *)(a1 + 88) = &std::ios::`vftable';
+	sub_10030520(a1, a1 + 8);
+	// *(_DWORD *)(a1 + *(_DWORD *)(*(_DWORD *)a1 + 4)) = &std::ifstream::`vftable';
+	sub_10030D80(a1 + 8);
+	*(_DWORD *)(a1 + 24) = a1 + 16;
+	*(_DWORD *)(a1 + 40) = a1 + 32;
+	*(_DWORD *)(a1 + 44) = a1 + 36;
+	// *(_DWORD *)(a1 + 8) = &std::filebuf::`vftable';
+	*(_BYTE *)(a1 + 80) = 0;
+	*(_BYTE *)(a1 + 73) = 0;
+	*(_DWORD *)(a1 + 28) = a1 + 20;
+	*(_DWORD *)(a1 + 56) = a1 + 48;
+	*(_DWORD *)(a1 + 60) = a1 + 52;
+	*(_DWORD *)(a1 + 20) = 0;
+	**(_DWORD **)(a1 + 44) = 0;
+	**(_DWORD **)(a1 + 60) = 0;
+	**(_DWORD **)(a1 + 24) = 0;
+	v1 = dword_1006DE9C;
+	**(_DWORD **)(a1 + 40) = 0;
+	**(_DWORD **)(a1 + 56) = 0;
+	*(_DWORD *)(a1 + 84) = 0;
+	*(_DWORD *)(a1 + 76) = v1;
+	*(_DWORD *)(a1 + 68) = 0;
+	return a1;
+}
+
 int __cdecl sub_1002EDC0()
 {
-	return 1;
+	int v0; // eax
+	int v1; // ecx
+	int v2; // eax
+	_DWORD *v3; // ecx
+	char v4; // al
+	int v5; // eax
+	int v7; // esi
+	__int64 v8; // [esp+Ch] [ebp-B8h] BYREF
+	__time64_t Time; // [esp+14h] [ebp-B0h] BYREF
+	int v10[22]; // [esp+1Ch] [ebp-A8h] BYREF
+	int v11[14]; // [esp+74h] [ebp-50h] BYREF
+	char v12[12]; // [esp+ACh] [ebp-18h] BYREF
+	int v13; // [esp+C0h] [ebp-4h]
+
+	sub_10030000(v10);
+	v13 = 0;
+	v0 = sub_1002E840(&v8, v12);
+	if ( !v0 )
+	{
+		if ( !sub_10030600(97) )
+		{
+			v1 = *(_DWORD *)(v10[0] + 4);
+			v2 = *(int *)((char *)&v10[2] + v1);
+			v3 = (int *)((char *)v10 + v1);
+			v4 = v2 | 2;
+			if ( !v3[10] )
+				v4 |= 4u;
+			v5 = v4 & 0x17;
+			v3[2] = v5;
+			if ( (v5 & v3[3]) != 0 )
+				sub_1002E630(0);
+		}
+		if ( (*((_BYTE *)&v10[2] + *(_DWORD *)(v10[0] + 4)) & 6) != 0 )
+		{
+			sub_1002EAA0();
+			v13 = -1;
+			sub_100300E0();
+			// v11[0] = (int)&std::ios_base::`vftable';
+			std::ios_base::_Ios_base_dtor((struct std::ios_base *)v11);
+			return 2;
+		}
+		v13 = -1;
+		sub_100300E0();
+		// v11[0] = (int)&std::ios_base::`vftable';
+		goto LABEL_10;
+	}
+	if ( v0 >= 0 )
+	{
+		_time64(&Time);
+		v7 = 2 - (Time - v8) / 86400;
+		v13 = -1;
+		sub_100300E0();
+		// v11[0] = (int)&std::ios_base::`vftable';
+		if ( v7 > 2 )
+		{
+LABEL_10:
+			std::ios_base::_Ios_base_dtor((struct std::ios_base *)v11);
+			return 0;
+		}
+		std::ios_base::_Ios_base_dtor((struct std::ios_base *)v11);
+		return v7;
+	}
+	else
+	{
+		v13 = -1;
+		sub_100300E0();
+		// v11[0] = (int)&std::ios_base::`vftable';
+		std::ios_base::_Ios_base_dtor((struct std::ios_base *)v11);
+		return 0;
+	}
 }
 
 int sub_1004594A(WORD a1, WORD a2, WORD a3)
