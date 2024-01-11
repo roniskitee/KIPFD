@@ -5,3 +5,6 @@ DATA PRELOAD SINGLE
 EXPORTS KipFD_FreeFeature
 EXPORTS KipFD_FreeLandmarks
 EXPORTS KipFD_GetLastError
+
+EXPORTS KipFD_SaveFaceThumbnail
+EXPORTS KipFD_Detect
