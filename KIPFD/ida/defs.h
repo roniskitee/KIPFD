@@ -111,11 +111,11 @@ typedef int bool;       // we want to use bool in our C programs
 #define WORDn(x, n)   (*((_WORD*)&(x)+n))
 #define DWORDn(x, n)  (*((_DWORD*)&(x)+n))
 
-#define LOBYTE(x)  BYTEn(x,LOW_IND(x,_BYTE))
-#define LOWORD(x)  WORDn(x,LOW_IND(x,_WORD))
+//#define LOBYTE(x)  BYTEn(x,LOW_IND(x,_BYTE))
+//#define LOWORD(x)  WORDn(x,LOW_IND(x,_WORD))
 #define LODWORD(x) DWORDn(x,LOW_IND(x,_DWORD))
-#define HIBYTE(x)  BYTEn(x,HIGH_IND(x,_BYTE))
-#define HIWORD(x)  WORDn(x,HIGH_IND(x,_WORD))
+//#define HIBYTE(x)  BYTEn(x,HIGH_IND(x,_BYTE))
+//#define HIWORD(x)  WORDn(x,HIGH_IND(x,_WORD))
 #define HIDWORD(x) DWORDn(x,HIGH_IND(x,_DWORD))
 #define BYTE1(x)   BYTEn(x,  1)         // byte 1 (counting from 0)
 #define BYTE2(x)   BYTEn(x,  2)
@@ -369,15 +369,15 @@ inline uint64  abs64(int64   x) { return x >= 0 ? x : -x; }
 //inline uint128 abs128(int128 x) { return x >= 0 ? x : -x; }
 
 #include <string.h>     // for memcpy
-#include <type_traits>  // for enable_if
+// #include <type_traits>  // for enable_if
 
-template <typename T, typename F>
-inline typename std::enable_if<sizeof(T) <= sizeof(F), T>::type __coerce(F f)
-{
-  T t;
-  memcpy(&t, &f, sizeof(T));
-  return t;
-}
+// template <typename T, typename F>
+// inline typename std::enable_if<sizeof(T) <= sizeof(F), T>::type __coerce(F f)
+// {
+//   T t;
+//   memcpy(&t, &f, sizeof(T));
+//   return t;
+// }
 #define COERCE_FLOAT(v) __coerce<float>(v)
 #define COERCE_DOUBLE(v) __coerce<double>(v)
 #define COERCE_LONG_DOUBLE(v) __coerce<long double>(v)

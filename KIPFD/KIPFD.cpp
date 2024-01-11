@@ -3,6 +3,7 @@
 
 #include "stdafx.h"
 #include "cximage/ximage.h"
+#include "ida/defs.h"
 
 //////////////////////////////////////////////////////////////////////KipFD_FreeFeature()
 int KipFD_FreeFeature(int a1)
@@ -27,6 +28,40 @@ int KipFD_GetLastError()
   return 0;
 }
 //////////////////////////////////////////////////////////////////////KipFD_SaveFaceThumbnail()
+int sub_100197C0(float* a1)
+{
+	return 1;
+}
+
+int __cdecl sub_1002EDC0()
+{
+	return 1;
+}
+
+int sub_1004594A(WORD a1, WORD a2, WORD a3)
+{
+	//return _cintrindisp2(this, &unk_1006CA50);
+	return -1;
+}
+
+int __cdecl sub_10015B10(float a1, float a2, float a3)
+{
+	float v4; // [esp+10h] [ebp+Ch]
+
+	v4 = a3 - a1;
+	return sub_1004594A(LODWORD(a1), LODWORD(a2), LODWORD(v4));
+}
+
+int __cdecl sub_10015AD0(float a1, float a2, float a3, float a4)
+{
+	float v5; // [esp+0h] [ebp-4h]
+	float v6; // [esp+10h] [ebp+Ch]
+
+	v5 = a3 - a1;
+	v6 = a4 - a2;
+	return (int)sqrt(v6 * v6 + v5 * v5);
+}
+
 int __cdecl KipFD_SaveFaceThumbnail(int a1, int a2, int a3, const wchar_t *a4)
 {
 	double v4; // st3
@@ -85,19 +120,18 @@ int __cdecl KipFD_SaveFaceThumbnail(int a1, int a2, int a3, const wchar_t *a4)
 	float v58; // [esp+120h] [ebp-2B8h]
 	float v59; // [esp+134h] [ebp-2A4h]
 	float v60; // [esp+138h] [ebp-2A0h]
-	_DWORD v61[129]; // [esp+1D0h] [ebp-208h] BYREF
+	CxImage* newImage; // [esp+1D0h] [ebp-208h] BYREF ;	v61=>newImage
 
 	if ( a1 && a2 && *(_DWORD *)a2 == 20 && (int)sub_100197C0(&v51) > 0 )
 	{
-		CxImage::CxImage((CxImage *)v61, 0);
-		if ( CxImage::CreateFromArray(
-			(CxImage *)v61,
-			*(unsigned __int8 **)(a2 + 16),
-			*(_DWORD *)(a2 + 4),
-			*(_DWORD *)(a2 + 8),
-			0x18u,
-			*(_DWORD *)(a2 + 12),
-			0) )
+		newImage = new CxImage();
+		if ( newImage->CreateFromArray(			
+			*(unsigned __int8 **)(a2 + 16),	//	BYTE* pArray
+			*(_DWORD *)(a2 + 4),			//	DWORD dwWidth
+			*(_DWORD *)(a2 + 8),			//	DWORD dwHeight
+			0x18u,							//	DWORD dwBitsperpixel [8*c=24; c=3]
+			*(_DWORD *)(a2 + 12),			//	DWORD dwBytesperline [c*w;3*(a2+4)]
+			0) )							//	bool bFlipImage
 		{
 			if ( (int)sub_1002EDC0() <= 2 && (int)sub_1002EDC0() > 0 )
 			{
@@ -114,7 +148,7 @@ int __cdecl KipFD_SaveFaceThumbnail(int a1, int a2, int a3, const wchar_t *a4)
 				v42 = v4;
 				v5 = v22 + v54;
 				v45 = v5;
-				sub_10015B10(v55, v56, v57, v58);
+				sub_10015B10(v55, v56, v57);
 				v48 = v5;
 				v20 = cos(v5);
 				v6 = sin(v5);
@@ -140,10 +174,10 @@ int __cdecl KipFD_SaveFaceThumbnail(int a1, int a2, int a3, const wchar_t *a4)
 				v47 = v60 + v16;
 				v9 = sub_10015AD0(v29, v33, v38, v41);
 				v10 = sub_10015AD0(v29, v33, v44, v47);
-				v17 = (double)CxImage::GetWidth((CxImage *)v61) * 0.5;
-				v24 = (double)CxImage::GetHeight((CxImage *)v61) * 0.5;
-				*(float *)&v20 = v48 * -180.0 / 3.141592741012573;
-				CxImage::Rotate2(v61, LODWORD(v20), 0, 2, 2, 0, 1, 0);
+				v17 = (double)newImage->GetWidth() * 0.5;
+				v24 = (double)newImage->GetHeight() * 0.5;
+				*(float *)&v20 = v48 * -180.0 / PI;
+				newImage->Rotate2(LODWORD(v20), 0, CxImage::IM_BILINEAR, CxImage::OM_BACKGROUND, 0, 1, 0);
 				v49 = -v48;
 				v21 = cos(v49);
 				v50 = sin(v49);
@@ -151,19 +185,20 @@ int __cdecl KipFD_SaveFaceThumbnail(int a1, int a2, int a3, const wchar_t *a4)
 				v34 = v33 - v24;
 				v18 = v50 * v30 + v34 * v21;
 				v25 = -v50 * v34 + v30 * v21;
-				v31 = (double)CxImage::GetWidth((CxImage *)v61) * 0.5 + v25;
-				v35 = (double)CxImage::GetHeight((CxImage *)v61) * 0.5 + v18;
-				CxImage::Crop((CxImage *)v61, (int)v31, (int)v35, (int)v31 + v9, (int)v35 + v10, 0);
-				CxImage::Resample((CxImage *)v61, 120, 140, 1, 0);
-				CxImage::Save((CxImage *)v61, a4, 1u);
-				v61[0] = &CxImage::`vftable';
-				CxImage::DestroyFrames((CxImage *)v61);
-				CxImage::Destroy((CxImage *)v61);
+				v31 = (double)newImage->GetWidth() * 0.5 + v25;
+				v35 = (double)newImage->GetHeight() * 0.5 + v18;
+				newImage->Crop((int)v31, (int)v35, (int)v31 + v9, (int)v35 + v10, 0);
+				newImage->Resample(120, 140, 1, 0);
+				newImage->Save(a4, 1u);
+				// v61[0] = &CxImage::`vftable';
+				newImage->DestroyFrames();
+				newImage->Destroy();
 				return 0;
 			}
-			dword_1006DE5C = 1;
+			// dword_1006DE5C = 1;
 		}
-		CxImage::~CxImage((CxImage *)v61);
+		// delete newImage;
+		newImage = NULL;
 	}
 	return -1;
 }
