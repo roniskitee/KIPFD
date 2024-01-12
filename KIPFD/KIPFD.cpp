@@ -6,6 +6,7 @@
 #include "ida/defs.h"
 
 _DWORD dword_1006DE5C = 0;
+wchar_t Destination[260];
 //////////////////////////////////////////////////////////////////////KipFD_FreeFeature()
 int KipFD_FreeFeature(int a1)
 {
@@ -38,11 +39,11 @@ int __stdcall sub_10030000(int a1)
 {
 	int v1; // edx
 
-	*(_DWORD *)a1 = &unk_1005677C;
+	//*(_DWORD *)a1 = &unk_1005677C;
 	// *(_DWORD *)(a1 + 88) = &std::ios::`vftable';
-	sub_10030520(a1, a1 + 8);
+	//sub_10030520(a1, a1 + 8);
 	// *(_DWORD *)(a1 + *(_DWORD *)(*(_DWORD *)a1 + 4)) = &std::ifstream::`vftable';
-	sub_10030D80(a1 + 8);
+	//sub_10030D80(a1 + 8);
 	*(_DWORD *)(a1 + 24) = a1 + 16;
 	*(_DWORD *)(a1 + 40) = a1 + 32;
 	*(_DWORD *)(a1 + 44) = a1 + 36;
@@ -56,7 +57,7 @@ int __stdcall sub_10030000(int a1)
 	**(_DWORD **)(a1 + 44) = 0;
 	**(_DWORD **)(a1 + 60) = 0;
 	**(_DWORD **)(a1 + 24) = 0;
-	v1 = dword_1006DE9C;
+	//v1 = dword_1006DE9C;
 	**(_DWORD **)(a1 + 40) = 0;
 	**(_DWORD **)(a1 + 56) = 0;
 	*(_DWORD *)(a1 + 84) = 0;
@@ -65,6 +66,324 @@ int __stdcall sub_10030000(int a1)
 	return a1;
 }
 
+BOOL sub_1002DE60(int a1, unsigned int a2, _BYTE *a3, _DWORD *a4)
+{
+	_BYTE *v4; // ebx
+	_BYTE *v5; // ebp
+	int v6; // esi
+	int v7; // edi
+	int i; // ecx
+	int v9; // eax
+	unsigned int v10; // eax
+	int v11; // eax
+	int v12; // esi
+	int v14; // [esp+8h] [ebp-Ch]
+	BOOL v15; // [esp+Ch] [ebp-8h]
+	unsigned int v16; // [esp+10h] [ebp-4h]
+
+	v4 = (_BYTE *)a2;
+	v5 = a3;
+	if ( !a2 || !a4 )
+		return 0;
+	v16 = a2 + a1;
+	v14 = 0;
+	v15 = a3 == 0;
+	if ( a2 < a2 + a1 )
+	{
+		do
+		{
+			if ( !*v4 )
+				break;
+			v6 = 0;
+			v7 = 0;
+			for ( i = 0; i < 4; ++i )
+			{
+				if ( (unsigned int)v4 >= v16 )
+					break;
+				v9 = (char)*v4;
+				if ( (unsigned int)(v9 - 0x41) > 0x19 )
+				{
+					if ( (unsigned int)(v9 - 0x61) > 0x19 )
+					{
+						if ( (unsigned int)(v9 - 0x30) > 9 )
+							v10 = v9 == 0x2B ? 0x3E : v9 != 0x2F ? 0xFFFFFFFF : 0x3F;
+						else
+							v10 = v9 + 4;
+					}
+					else
+					{
+						v10 = v9 - 0x47;
+					}
+				}
+				else
+				{
+					v10 = v9 - 0x41;
+				}
+				++v4;
+				if ( v10 == 0xFFFFFFFF )
+				{
+					--i;
+				}
+				else
+				{
+					v6 = v10 | (v6 << 6);
+					v7 += 6;
+				}
+			}
+			if ( !v15 )
+				v15 = v14 + v7 / 8 > *a4;
+			v11 = v7 / 8;
+			v12 = v6 << (0x18 - v7);
+			if ( v7 / 8 > 0 )
+			{
+				v14 += v11;
+				do
+				{
+					if ( !v15 )
+						*v5++ = BYTE2(v12);
+					v12 <<= 8;
+					--v11;
+				}
+				while ( v11 );
+			}
+		}
+		while ( (unsigned int)v4 < v16 );
+	}
+	*a4 = v14;
+	return !v15;
+}
+
+char byte_10056538[64];	//A~Z, a~z, 0~9, + / : string
+int sub_1002DD30(unsigned __int8 *a1, _BYTE *a2, int *a3)
+{
+	unsigned __int8 *v3; // esi
+	int v4; // ebp
+	int v5; // edx
+	int v6; // edi
+	bool v7; // zf
+	unsigned int v8; // eax
+	char v9; // bl
+	_BYTE *v10; // ecx
+	unsigned int v11; // eax
+	int v12; // esi
+	int v14; // [esp+10h] [ebp-4h]
+
+	v3 = a1;
+	if ( !a1 || !a2 || !a3 || *a3 < 0x1A )
+		return 0;
+	v4 = 0x13;
+	v5 = 0;
+	v6 = 0;
+	v14 = 0x13;
+	v7 = 1;
+	do
+	{
+		if ( v7 )
+		{
+			v4 = 5;
+			v14 = 5;
+		}
+		do
+		{
+			v8 = (v3[2] | ((v3[1] | (*v3 << 8)) << 8)) << 8;
+			*a2 = byte_10056538[v8 >> 0x1A];
+			v8 <<= 6;
+			v9 = byte_10056538[v8 >> 0x1A];
+			v8 <<= 6;
+			a2[1] = v9;
+			a2[2] = byte_10056538[v8 >> 0x1A];
+			a2[3] = byte_10056538[(v8 >> 0x14) & 0x3F];
+			v3 += 3;
+			a2 += 4;
+			--v4;
+		}
+		while ( v4 );
+		v4 = v14;
+		*a2 = 0xD;
+		v10 = a2 + 1;
+		*v10 = 0xA;
+		++v5;
+		a2 = v10 + 1;
+		v6 += 4 * v14 + 2;
+		v7 = v5 == 0;
+	}
+	while ( v5 <= 0 );
+	if ( v6 )
+	{
+		a2 += 0xFFFFFFFE;
+		v6 -= 2;
+	}
+	v11 = *v3 << 0x18;
+	v12 = 2;
+	do
+	{
+		*a2++ = byte_10056538[v11 >> 0x1A];
+		v11 <<= 6;
+		--v12;
+	}
+	while ( v12 );
+	*(_WORD *)a2 = 0x3D3D;
+	*a3 = v6 + 4;
+	return 1;
+}
+
+char byte_100565C0[];	//46h
+char byte_100565C1[];	//52h
+char byte_100565C2[];	//53h
+char byte_100565C3[];	//44h
+int __fastcall sub_1002E840(int *a1, unsigned int *a2)
+{
+	unsigned int i; // eax
+	char v6; // cl
+	char v7; // cl
+	int v8; // edx
+	unsigned int v9; // ecx
+	unsigned int v10; // edx
+	int v11; // eax
+	unsigned int v12; // ecx
+	int v13; // esi
+	unsigned int v14; // edi
+	unsigned int j; // eax
+	char v16; // dl
+	char v17; // dl
+	HKEY phkResult; // [esp+10h] [ebp-224h] BYREF
+	int v19; // [esp+14h] [ebp-220h] BYREF
+	DWORD cbData; // [esp+18h] [ebp-21Ch] BYREF
+	DWORD Type; // [esp+1Ch] [ebp-218h] BYREF
+	__time64_t Time; // [esp+20h] [ebp-214h] BYREF
+	int v23; // [esp+28h] [ebp-20Ch] BYREF
+	int v24; // [esp+2Ch] [ebp-208h]
+	__time64_t v25; // [esp+30h] [ebp-204h]
+	BYTE Data[260]; // [esp+128h] [ebp-10Ch] BYREF
+
+	GetSystemDirectoryW(Destination, 0x104u);
+	wcscat_s(Destination, 0x104u, L"\\ipfrsdklic.db");
+	phkResult = 0;
+	if ( RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\SoftWrap\\IPFRSDK", 0, 0xF003Fu, &phkResult) )
+		return 0;
+	cbData = 0x100;
+	if ( RegQueryValueExW(phkResult, L"License", 0, &Type, Data, &cbData) || Type != 3 )
+	{
+		RegCloseKey(phkResult);
+		return 0;
+	}
+	RegCloseKey(phkResult);
+	v19 = 0x100;
+	if ( !sub_1002DE60(&v23, &v19, 0, 0) )
+		return 0xFFFFFFFF;
+	if ( v19 != 0x10 )
+		return 0xFFFFFFFF;
+	for ( i = 0; i < 0x10; i += 4 )
+	{
+		v6 = byte_100565C1[i];
+		*((_BYTE *)&v23 + i) ^= byte_100565C0[i];
+		*((_BYTE *)&v23 + i + 1) ^= v6;
+		v7 = byte_100565C3[i];
+		*((_BYTE *)&v23 + i + 2) ^= byte_100565C2[i];
+		*((_BYTE *)&v23 + i + 3) ^= v7;
+	}
+	v8 = v23;
+	v9 = v25;
+	a1[1] = v24;
+	*a1 = v8;
+	v10 = HIDWORD(v25);
+	*a2 = v9;
+	a2[1] = v10;
+	_time64(&Time);
+	v11 = *a1;
+	v12 = *a2;
+	v13 = a1[1];
+	v14 = a2[1];
+	if ( __SPAIR64__(v14, v12) < __SPAIR64__(v13, v11) || __SPAIR64__(v14, v12) > Time )
+		return 0xFFFFFFFF;
+	v23 = v11;
+	v24 = v13;
+	v25 = Time;
+	for ( j = 0; j < 0x10; j += 4 )
+	{
+		v16 = byte_100565C1[j];
+		*((_BYTE *)&v23 + j) ^= byte_100565C0[j];
+		*((_BYTE *)&v23 + j + 1) ^= v16;
+		v17 = byte_100565C3[j];
+		*((_BYTE *)&v23 + j + 2) ^= byte_100565C2[j];
+		*((_BYTE *)&v23 + j + 3) ^= v17;
+	}
+	v19 = 0x100;
+	sub_1002DD30(&v19);
+	RegOpenKeyExW(HKEY_LOCAL_MACHINE, L"SOFTWARE\\SoftWrap\\IPFRSDK", 0, 0xF003Fu, &phkResult);
+	RegSetValueExW(phkResult, L"License", 0, 3u, Data, cbData);
+	RegCloseKey(phkResult);
+	return 1;
+}
+
+_DWORD dword_1006DE9C;
+int sub_10030770(int result, int a2, int a3)
+{
+	*(_DWORD *)(result + 0x20) = result + 0x18;
+	*(_BYTE *)(result + 0x48) = a3 == 1;
+	*(_DWORD *)(result + 0x24) = result + 0x1C;
+	*(_DWORD *)(result + 0x10) = result + 8;
+	*(_DWORD *)(result + 0x30) = result + 0x28;
+	*(_BYTE *)(result + 0x41) = 0;
+	*(_DWORD *)(result + 0x14) = result + 0xC;
+	*(_DWORD *)(result + 0x34) = result + 0x2C;
+	*(_DWORD *)(result + 0xC) = 0;
+	**(_DWORD **)(result + 0x24) = 0;
+	**(_DWORD **)(result + 0x34) = 0;
+	**(_DWORD **)(result + 0x10) = 0;
+	**(_DWORD **)(result + 0x20) = 0;
+	**(_DWORD **)(result + 0x30) = 0;
+	if ( a2 )
+	{
+		*(_DWORD *)(result + 0x10) = a2 + 8;
+		*(_DWORD *)(result + 0x14) = a2 + 8;
+		*(_DWORD *)(result + 0x20) = a2;
+		*(_DWORD *)(result + 0x24) = a2;
+		*(_DWORD *)(result + 0x30) = a2 + 4;
+		*(_DWORD *)(result + 0x34) = a2 + 4;
+	}
+	*(_DWORD *)(result + 0x4C) = a2;
+	*(_DWORD *)(result + 0x44) = dword_1006DE9C;
+	*(_DWORD *)(result + 0x3C) = 0;
+	return result;
+}
+_DWORD* sub_10030E80(int a1, int a, _DWORD *a3)
+{
+	int v3; // esi
+	int v4; // eax
+	int v6; // [esp+0h] [ebp-4h] BYREF
+
+	v6 = a2;
+	v3 = **(_DWORD **)(a1 + 0x38);
+	*a3 = v3;
+	std::_Lockit::_Lockit((std::_Lockit *)&v6, 0);
+	v4 = *(_DWORD *)(v3 + 4);
+	if ( v4 != 0xFFFFFFFF )
+		*(_DWORD *)(v3 + 4) = v4 + 1;
+	std::_Lockit::~_Lockit((std::_Lockit *)&v6);
+	return a3;
+}
+int sub_10030600(int a1, int a2)
+{
+	int v2; // edi
+
+	if ( *(_DWORD *)(a1 + 0x4C) || !std::_Fiopen(Destination, a2, 0x40) )
+		return 0;
+	sub_10030770(1);
+	sub_10030E80();
+	//v2 = sub_10031130();
+	if ( (*(unsigned __int8 (__thiscall **)(int))(*(_DWORD *)v2 + 4))(v2) )
+	{
+		*(_DWORD *)(a1 + 0x3C) = 0;
+	}
+	else
+	{
+		*(_DWORD *)(a1 + 0x3C) = v2;
+		//sub_10030EB0();
+	}
+	//sub_1002E210();
+	return a1;
+}
 int __cdecl sub_1002EDC0()
 {
 	int v0; // eax
@@ -96,14 +415,14 @@ int __cdecl sub_1002EDC0()
 				v4 |= 4u;
 			v5 = v4 & 0x17;
 			v3[2] = v5;
-			if ( (v5 & v3[3]) != 0 )
-				sub_1002E630(0);
+			/*if ( (v5 & v3[3]) != 0 )
+				sub_1002E630(0);*/
 		}
 		if ( (*((_BYTE *)&v10[2] + *(_DWORD *)(v10[0] + 4)) & 6) != 0 )
 		{
-			sub_1002EAA0();
+			//sub_1002EAA0();
 			v13 = -1;
-			sub_100300E0();
+			//sub_100300E0();
 			// v11[0] = (int)&std::ios_base::`vftable';
 			std::ios_base::_Ios_base_dtor((struct std::ios_base *)v11);
 			return 2;
@@ -118,7 +437,7 @@ int __cdecl sub_1002EDC0()
 		_time64(&Time);
 		v7 = 2 - (Time - v8) / 86400;
 		v13 = -1;
-		sub_100300E0();
+		//sub_100300E0();
 		// v11[0] = (int)&std::ios_base::`vftable';
 		if ( v7 > 2 )
 		{
@@ -132,7 +451,7 @@ LABEL_10:
 	else
 	{
 		v13 = -1;
-		sub_100300E0();
+		//sub_100300E0();
 		// v11[0] = (int)&std::ios_base::`vftable';
 		std::ios_base::_Ios_base_dtor((struct std::ios_base *)v11);
 		return 0;
@@ -304,18 +623,7 @@ int __cdecl KipFD_SaveFaceThumbnail(int a1, int a2, int a3, const wchar_t *a4)
 	return -1;
 }
 //////////////////////////////////////////////////////////////////////KipFD_Detect()
-int __cdecl sub_10018A00(
-						 void *Src,
-						 int a2,
-						 int a3,
-						 _DWORD *a4,
-						 _DWORD *a5,
-						 int a6,
-						 int a7,
-						 int a8,
-						 int a9,
-						 int a10,
-						 _DWORD *a11)
+int __cdecl sub_10018A00(void *Src, int a2, int a3, int a4, int a5, int a6, int a7, int a8, int a9, int a10, int a11)
 {
 	unsigned int v12; // edi
 	unsigned int v13; // ebx
@@ -399,7 +707,7 @@ int sub_10019750(int *a1, void *Src, int a3, int a4)
 	v9 = a1[4];
 	v10 = a1[5];
 	v11 = 0;
-	if ( sub_10018A00(Src, a3, a4, (_DWORD*)(a1 + 6), (_DWORD*)&v11, v5, v6, v7, v8, v9, (_DWORD*)v10) )
+	if ( sub_10018A00(Src, a3, a4, (int)(a1 + 6), (int)&v11, v5, v6, v7, v8, v9, (int)v10) )
 		return -1;
 	else
 		return v11;
